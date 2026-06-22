@@ -1,39 +1,30 @@
-# Alibre Assimp Add-on
+# Assimp Inside Alibre Design
 
-> Note: This repository is undergoing significant changes and is currently a work in progress.
+An Alibre Design add-on that imports common 3D mesh formats into Alibre using the Assimp (Open Asset Import) library. Selected files are converted to STEP via Assimp and brought into the active session through Alibre's STEP import.
 
-| Item | Value |
-| --- | --- |
-| Type | Alibre add-on / plugin |
-| Primary stack | C#, Alibre automation |
-
-## Overview
-This repository contains the source and supporting assets for Alibre Assimp Add-on, organized under the standardized repository layout.
-
-## Repository Layout
-- source/: project source, solution or project files, and runtime assets.
-- submodules/: external git submodules used by the repository when required.
-- documentation/: supplementary notes, changelogs, and non-GitHub documentation.
-- .github/: repository README, templates, and GitHub-specific community files.
-- `source/alibre-assimp-addon.adc`: key source or build entry point.
-- `source/alibre-assimp-addon.csproj`: key source or build entry point.
-- `source/alibre-assimp.sln`: key source or build entry point.
-- `LICENSE`: repository license file kept at the root.
+## Features
+- Adds an "Assimp Inside Alibre Design" menu with Import, Export, and Tools groups.
+- Imports mesh formats and loads them into Alibre as STEP geometry: glTF (`.gltf`/`.glb`), OBJ, FBX, DAE (Collada), PLY, 3DS, and 3DM.
+- "Convert File to STEP" tool converts a chosen 3D model (`.stl`, `.obj`, `.ply`, `.dae`, `.3ds`, `.fbx`, `.gltf`, `.glb`) to STEP and imports it.
+- "Supported Formats" tool lists the import and export formats reported by the installed Assimp build.
+- Export menu entries are present but not yet implemented (they display a placeholder notice).
 
 ## Requirements
-- Windows development environment.
-- A .NET build environment compatible with the projects under source/.
-- Alibre Design installed if you need to run, debug, or validate the Alibre integration.
+- Alibre Design 29.0.0.29060 (the project references the API from this install).
+- .NET Framework 4.8.1 (x64).
+- AssimpNet 5.0.0-beta1 and its bundled native Assimp libraries.
 
-## Build and Use
-1. Open `source/alibre-assimp.sln` in your preferred IDE.
-2. Restore dependencies and build from the source/ layout.
-3. Use the notes in documentation/ and .github/README.md as the primary repository guide.
+## Installation
+1. Build the project in `source/` (`alibre-assimp.sln`) in Release for x64.
+2. Copy the build output to a folder, including `alibre-assimp-addon.dll`, the add-on manifest `alibre-assimp-addon.adc`, the native Assimp libraries, and the `Icons` folder.
+3. Register the `.adc` manifest with Alibre Design's add-on loader so it loads at startup.
+4. Restart Alibre Design.
 
-## Current Limitations
-- The repository has been normalized for layout consistency; any path-sensitive tooling should be revalidated against the new folder structure.
-- Existing runtime behavior and project-specific limitations remain unchanged.
+## Usage
+1. Open or create a session in Alibre Design.
+2. Open the "Assimp Inside Alibre Design" menu.
+3. Choose a format under Import and select a file to load it into the current session, or use Tools > Convert File to STEP to convert and import any supported model.
+4. Use Tools > Supported Formats to review the formats available in your Assimp build.
 
 ## License
 See [LICENSE](../LICENSE).
-

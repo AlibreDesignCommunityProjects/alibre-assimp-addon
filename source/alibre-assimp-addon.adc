@@ -6,5 +6,5 @@
    <Menu text="assimp"/>
    <Description>assimp</Description> 
    <Workspace type="Always"/>
-   <Property name="Identifier" value="alibre-assimp-addon"/>
+   <Property name="Identifier" value="{0CC91391-49C4-4836-B7B4-04119ED38D99}"/>
 </AlibreDesignAddOn>

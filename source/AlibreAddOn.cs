@@ -51,14 +51,7 @@ namespace AlibreAddOnAssembly
         {
             _AlibreRoot = AlibreRoot;
             _parentWinHandle = parentWinHandle;
-            try
-            {
-                _menuManager = new MenuManager(_AlibreRoot.TopmostSession);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Failed to initialize AddOnRibbon: {ex.Message}");
-            }
+            _menuManager = new MenuManager(_AlibreRoot.TopmostSession);
         }
         public int RootMenuItem => _menuManager.GetRootMenuItem().Id;
         public IAlibreAddOnCommand? InvokeCommand(int menuID, string sessionIdentifier)
@@ -147,10 +140,6 @@ namespace AlibreAddOnAssembly
                                     alibreRoot.ImportSTEPFile(tempStepPath);
                                     MessageBox.Show($"{filterDescription} file imported successfully via Assimp!",
                                         "Import Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                                    
-                                    // Clean up temp file
-                                    if (File.Exists(tempStepPath))
-                                        File.Delete(tempStepPath);
                                 }
                                 else
                                 {
@@ -162,6 +151,16 @@ namespace AlibreAddOnAssembly
                             {
                                 MessageBox.Show($"Import failed (Alibre API error):\n{ex.Message}",
                                                 "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                            finally
+                            {
+                                // Clean up temp file (cleanup failure must not mask the real error)
+                                try
+                                {
+                                    if (File.Exists(tempStepPath))
+                                        File.Delete(tempStepPath);
+                                }
+                                catch { }
                             }
                         }
                         else
@@ -193,7 +192,7 @@ namespace AlibreAddOnAssembly
             {
                 Title = $"Save as {filterDescription}",
                 Filter = $"{filterDescription} files ({filterExtensions})|{filterExtensions}|All files (*.*)|*.*",
-                DefaultExt = filterExtensions.Split(';')[0].Replace("*", "")
+                DefaultExt = filterExtensions.Split(';')[0].Replace("*.", "").Replace("*", "")
             };
 
             if (sfd.ShowDialog() != DialogResult.OK)
