@@ -120,16 +120,15 @@ namespace AlibreAddOnAssembly
                 return null;
 
             string inputPath = ofd.FileName;
-            
+
             try
             {
                 using (var assimpService = new AssimpService())
                 {
                     if (assimpService.ImportFile(inputPath, out Scene? scene) && scene != null)
                     {
-                        // Convert to a format that Alibre can understand (STEP or STL)
                         string tempStepPath = Path.Combine(Path.GetTempPath(), $"{Path.GetFileNameWithoutExtension(inputPath)}_temp.stp");
-                        
+
                         if (assimpService.ExportFile(scene, tempStepPath, "stp"))
                         {
                             try
@@ -154,7 +153,6 @@ namespace AlibreAddOnAssembly
                             }
                             finally
                             {
-                                // Clean up temp file (cleanup failure must not mask the real error)
                                 try
                                 {
                                     if (File.Exists(tempStepPath))
@@ -181,13 +179,12 @@ namespace AlibreAddOnAssembly
                 MessageBox.Show($"An unexpected error occurred during import:\n{ex.Message}",
                                 "Import Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
+
             return null;
         }
 
         public IAlibreAddOnCommand? ExportFile(IADSession session, string filterDescription, string filterExtensions, string assimpFormat)
         {
-            // Note: This is a simplified version - may need adjustment based on actual Alibre API
             var sfd = new SaveFileDialog
             {
                 Title = $"Save as {filterDescription}",
@@ -203,7 +200,6 @@ namespace AlibreAddOnAssembly
 
             try
             {
-                // For now, show message indicating the export functionality needs current document export
                 MessageBox.Show($"Export to {filterDescription} format selected.\n\n" +
                                $"Output file: {outputPath}\n\n" +
                                "Note: Full export functionality requires exporting the current document to STEP first,\n" +
@@ -288,7 +284,7 @@ namespace AlibreAddOnAssembly
                 using (var assimpService = new AssimpService())
                 {
                     bool success = assimpService.ConvertStlToStep(inputPath, stepPath);
-                    
+
                     if (success && File.Exists(stepPath))
                     {
                         FileInfo stepFileInfo = new FileInfo(stepPath);
@@ -330,7 +326,7 @@ namespace AlibreAddOnAssembly
                             errorDetails += "The output STEP file was not created.";
                         else
                             errorDetails += "The conversion process encountered an error.";
-                        
+
                         MessageBox.Show(errorDetails, "File Conversion Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
@@ -470,14 +466,12 @@ namespace AlibreAddOnAssembly
         {
             try
             {
-                // Load the input file
                 var scene = _assimpContext.ImportFile(inputPath, PostProcessSteps.Triangulate | PostProcessSteps.FlipUVs);
                 if (scene == null)
                 {
                     return false;
                 }
 
-                // Export to the specified format
                 return _assimpContext.ExportFile(scene, outputPath, outputFormat);
             }
             catch (Exception ex)
@@ -497,9 +491,9 @@ namespace AlibreAddOnAssembly
             scene = null;
             try
             {
-                scene = _assimpContext.ImportFile(filePath, 
-                    PostProcessSteps.Triangulate | 
-                    PostProcessSteps.FlipUVs | 
+                scene = _assimpContext.ImportFile(filePath,
+                    PostProcessSteps.Triangulate |
+                    PostProcessSteps.FlipUVs |
                     PostProcessSteps.GenerateNormals |
                     PostProcessSteps.OptimizeMeshes);
                 return scene != null;

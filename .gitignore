@@ -385,3 +385,9 @@ $RECYCLE.BIN/
 *.lnk
 # Vim temporary swap files
 *.swp
+
+# Developer notes extracted from source comments; not committed.
+documentation/developer/
+
+# Code reviews are private developer data; not committed.
+reviews/
