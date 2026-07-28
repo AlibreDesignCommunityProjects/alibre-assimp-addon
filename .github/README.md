@@ -19,7 +19,6 @@
   - Where things live
     - `source/` holds the C# add-on project and its manifest.
     - `documentation/` holds reference notes.
-    - `reviews/` holds dated code reviews.
   - Good to know
     - The Export menu entries are placeholders and show a notice rather than writing a file.
     - The project points at a specific Alibre install path, so adjust it if your version differs.
